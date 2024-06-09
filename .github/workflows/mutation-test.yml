@@ -1,0 +1,73 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Mutation Test
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    paths: [ ".github/workflows/mutation-test.yml", ".config/*.json" ]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * 0"
+
+env:
+  DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛡️ Harden Runner
+        uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+        with:
+          disable-sudo: true
+          egress-policy: block
+          allowed-endpoints: >
+            aka.ms:443
+            api.nuget.org:443
+            auth.docker.io:443
+            dashboard.stryker-mutator.io:443
+            dotnetcli.azureedge.net:443
+            github.com:443
+            production.cloudflare.docker.com:443
+            registry-1.docker.io:443
+
+      - name: 🛒 Checkout
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+        with:
+          fetch-depth: 0
+
+      - name: 🧰 Setup .NET
+        uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
+        with:
+          dotnet-version: 8.0.x
+
+      - name: 🗃️ Setup NuGet cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: 🧬 Stryker
+        run: |
+          dotnet tool restore
+          dotnet stryker -f .config/stryker-config.json -O StrykerOutput --dashboard-api-key ${{ secrets.STRYKER_DASHBOARD_API_KEY }} -v main
+
+      - name: 📤 Upload Mutation Report
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+        with:
+          name: mutation-report
+          path: StrykerOutput/reports
+
+      - name: 📓 Mutation Test Summary
+        run: cat StrykerOutput/reports/mutation-report.md >> $GITHUB_STEP_SUMMARY

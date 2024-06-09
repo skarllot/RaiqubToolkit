@@ -1,0 +1,61 @@
+name: Package
+
+on:
+  release:
+    types: [published]
+
+env:
+  DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+permissions:
+  contents: read
+
+jobs:
+  nuget:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛡️ Harden Runner
+        uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+        with:
+          disable-sudo: true
+          egress-policy: block
+          allowed-endpoints: >
+            aka.ms:443
+            api.nuget.org:443
+            dotnetcli.azureedge.net:443
+            github.com:443
+            www.nuget.org:443
+
+      - name: 🛒 Checkout
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+        with:
+          fetch-depth: 0
+
+      - name: 🧰 Setup .NET
+        uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
+        with:
+          global-json-file: global.json
+
+      - name: 🗃️ Setup NuGet cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: 📥 Restore dependencies
+        run: dotnet restore --locked-mode
+
+      - name: 🏗️ Build
+        run: dotnet build --no-restore -c Release
+
+      - name: 📦 Pack
+        run: dotnet pack /p:CI=true /p:PublicRelease=true --no-build -c Release
+
+      - name: 🚀 Publish
+        run: dotnet nuget push "artifacts/*.nupkg" -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_APIKEY }} --skip-duplicate

@@ -1,0 +1,125 @@
+# For most projects, this workflow file will not need changing; you simply need
+# to commit it to your repository.
+#
+# You may wish to alter this file to override the set of languages analyzed,
+# or to provide custom queries or build logic.
+#
+# ******** NOTE ********
+# We have attempted to detect the languages in your repository. Please check
+# the `language` matrix defined below to confirm you have the correct set of
+# supported CodeQL languages.
+#
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "main" ]
+    paths: [ "src/**", "tests/**", "docs/**", '.github/workflows/codeql.yml' ]
+  schedule:
+    - cron: '28 20 * * 1'
+
+env:
+  DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
+        language: [ 'csharp' ]
+
+    steps:
+    - name: 🛡️ Harden Runner
+      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+      with:
+        disable-sudo: true
+        egress-policy: block
+        allowed-endpoints: >
+          aka.ms:443
+          api.github.com:443
+          api.nuget.org:443
+          dotnetcli.azureedge.net:443
+          github.com:443
+          objects.githubusercontent.com:443
+          registry.npmjs.org:443
+          uploads.github.com:443
+
+    - name: 🛒 Checkout repository
+      uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+      with:
+        fetch-depth: 0
+
+    - name: 🧰 Setup .NET
+      uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
+      with:
+        global-json-file: global.json
+      if: matrix.language == 'csharp'
+
+    - name: 🗃️ Setup NuGet cache
+      uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: ${{ runner.os }}-nuget-
+      if: matrix.language == 'csharp'
+
+    - name: 🧰 Setup Node
+      uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      with:
+        node-version: 20
+        cache: npm
+        cache-dependency-path: docs/package-lock.json
+      if: matrix.language == 'javascript-typescript'
+
+    # Initializes the CodeQL tools for scanning.
+    - name: 🛠️ Initialize CodeQL
+      uses: github/codeql-action/init@2e230e8fe0ad3a14a340ad0815ddb96d599d2aff # v3.25.8
+      with:
+        languages: ${{ matrix.language }}
+        # If you wish to specify custom queries, you can do so here or in a config file.
+        # By default, queries listed here will override any specified in a config file.
+        # Prefix the list here with "+" to use these queries and those in the config file.
+
+        # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+        # queries: security-extended,security-and-quality
+
+    - name: 📥 Restore dependencies
+      run: dotnet restore --locked-mode
+      if: matrix.language == 'csharp'
+
+    - name: 🏗️ Build
+      run: dotnet build --no-restore -c Release
+      if: matrix.language == 'csharp'
+
+    - name: 📥 Install dependencies
+      run: npm ci
+      working-directory: docs
+      if: matrix.language == 'javascript-typescript'
+
+    - name: 🏗️ Build with VitePress
+      run: npm run docs:build
+      working-directory: docs
+      if: matrix.language == 'javascript-typescript'
+
+    - name: 🔍 Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@2e230e8fe0ad3a14a340ad0815ddb96d599d2aff # v3.25.8
+      with:
+        category: "/language:${{matrix.language}}"
