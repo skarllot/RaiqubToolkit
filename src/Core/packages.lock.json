@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "dependencies": {
     "net8.0": {
       "AutomaticInterface": {
@@ -22,9 +22,9 @@
       },
       "Meziantou.Analyzer": {
         "type": "Direct",
-        "requested": "[2.0.155, )",
-        "resolved": "2.0.155",
-        "contentHash": "ugvSofIM4UFomZmLHBA8qrZptcvtECxVxew1IhhZVpTwx6TypwGEblKz8TX5xro8NJVIcg/BgIvXnNFkLsRYVQ=="
+        "requested": "[2.0.158, )",
+        "resolved": "2.0.158",
+        "contentHash": "j76YbCBP7jI5H9MSxpmpsZiTz2rGiDxvQ/Vkm5XL+SAsrtsXPVcOQWx4hrwpmSxjP8acEF7l6BTELEcdj3cGRQ=="
       },
       "Nerdbank.GitVersioning": {
         "type": "Direct",
