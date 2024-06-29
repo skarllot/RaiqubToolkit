@@ -29,7 +29,7 @@ public static class ServiceCollectionInterfaceExtensions
         }
         else
         {
-            TryAddCopy(collection, typeof(TService));
+            TryAddCopy(collection, typeof(TService), lifetime);
         }
     }
 
@@ -118,7 +118,7 @@ public static class ServiceCollectionInterfaceExtensions
         }
         else
         {
-            TryAddCopy(collection, implementationType);
+            TryAddCopy(collection, implementationType, lifetime);
         }
     }
 
@@ -164,11 +164,11 @@ public static class ServiceCollectionInterfaceExtensions
         TryAddWithInterfaces(collection, implementationType, ServiceLifetime.Transient);
     }
 
-    private static void TryAddCopy(IServiceCollection collection, Type implementationType)
+    private static void TryAddCopy(IServiceCollection collection, Type implementationType, ServiceLifetime lifetime)
     {
         foreach (var item in GetInterfaces(implementationType))
         {
-            collection.TryAddTransient(item, implementationType);
+            collection.TryAdd(ServiceDescriptor.Describe(item, implementationType, lifetime));
         }
     }
 
@@ -178,7 +178,7 @@ public static class ServiceCollectionInterfaceExtensions
 
         foreach (var item in GetInterfaces(typeof(TService)))
         {
-            collection.TryAddTransient(item, factory);
+            collection.TryAdd(ServiceDescriptor.Describe(item, factory, (ServiceLifetime)(-1)));
         }
     }
 
@@ -188,7 +188,7 @@ public static class ServiceCollectionInterfaceExtensions
 
         foreach (var item in GetInterfaces(implementationType))
         {
-            collection.TryAddTransient(item, factory);
+            collection.TryAdd(ServiceDescriptor.Describe(item, factory, (ServiceLifetime)(-1)));
         }
     }
 
