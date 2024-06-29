@@ -1,0 +1,33 @@
+{
+    "stryker-config": {
+        "target-framework": "net8.0",
+        "reporters": [
+            "json",
+            "html",
+            "markdown",
+            "dashboard"
+        ],
+        "ignore-methods": [
+            "*Exception.ctor",
+            "ConfigureAwait",
+            "Dispose",
+            "DisposeAsync",
+            "DisposeAsyncCore",
+            "SuppressFinalize"
+        ],
+        "mutate": [],
+        "thresholds": {
+            "break": 0
+        },
+        "since": {
+            "enabled": false,
+            "ignore-changes-in": [
+                "*.md",
+                ".config/**/*.*",
+                ".idea/**/*.*",
+                ".github/**/*.*"
+            ]
+        },
+        "ignore-mutations": []
+    }
+}
