@@ -22,9 +22,9 @@
       },
       "Meziantou.Analyzer": {
         "type": "Direct",
-        "requested": "[2.0.158, )",
-        "resolved": "2.0.158",
-        "contentHash": "j76YbCBP7jI5H9MSxpmpsZiTz2rGiDxvQ/Vkm5XL+SAsrtsXPVcOQWx4hrwpmSxjP8acEF7l6BTELEcdj3cGRQ=="
+        "requested": "[2.0.159, )",
+        "resolved": "2.0.159",
+        "contentHash": "+Lu4NktCK98/PkPCluTA+uRHS7uvMXa/Z2WLPE8TDsS/ybYtaOhfq8Wi745fO26wI8rNGaJlKsfFskcKWC5eDQ=="
       },
       "Nerdbank.GitVersioning": {
         "type": "Direct",
