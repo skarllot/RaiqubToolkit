@@ -16,9 +16,9 @@
       },
       "Meziantou.Analyzer": {
         "type": "Direct",
-        "requested": "[2.0.159, )",
-        "resolved": "2.0.159",
-        "contentHash": "+Lu4NktCK98/PkPCluTA+uRHS7uvMXa/Z2WLPE8TDsS/ybYtaOhfq8Wi745fO26wI8rNGaJlKsfFskcKWC5eDQ=="
+        "requested": "[2.0.163, )",
+        "resolved": "2.0.163",
+        "contentHash": "vN0YmOkuvPLukMsefLHYCWYaLPzpc6SfoR74aPwuLeK8QdxgxkavywQ1q/II0shLEEaN1RhlMjmL1RxMPW853w=="
       },
       "Nerdbank.GitVersioning": {
         "type": "Direct",
