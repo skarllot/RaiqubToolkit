@@ -4,7 +4,7 @@
     <CentralPackageVersionOverrideEnabled>false</CentralPackageVersionOverrideEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AutomaticInterface" Version="2.3.0" />
+    <PackageVersion Include="AutomaticInterface" Version="4.1.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.2" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.4" />
