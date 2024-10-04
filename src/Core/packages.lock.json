@@ -4,9 +4,9 @@
     "net8.0": {
       "AutomaticInterface": {
         "type": "Direct",
-        "requested": "[2.5.0, )",
-        "resolved": "2.5.0",
-        "contentHash": "A3/O+CyJJ0wGbSg5k+v5UtnEYBvuscKaPf30fzyHHXwCcdSN8mFSKCj1vdke1wt3REx7sAZfC6VWAez+r7QiZg=="
+        "requested": "[5.0.1, )",
+        "resolved": "5.0.1",
+        "contentHash": "OCMPH08lOCT8ZWsOgtCNrHt/qh/lDbzwPlSRk/gHCpQAQrs7b7YET+0r/Ez7nW/sWtfiGQdWBNo0B8je3ItcQw=="
       },
       "DotNet.ReproducibleBuilds": {
         "type": "Direct",
