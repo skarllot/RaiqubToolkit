@@ -1,4 +1,6 @@
-﻿namespace Raiqub.Toolkit.DependencyInjection.Tests.Examples;
+﻿using AutomaticInterface;
+
+namespace Raiqub.Toolkit.DependencyInjection.Tests.Examples;
 
 #pragma warning disable CS9113 // Parameter is unread.
 
