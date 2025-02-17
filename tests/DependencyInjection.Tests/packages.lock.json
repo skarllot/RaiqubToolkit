@@ -4,9 +4,9 @@
     "net8.0": {
       "AutomaticInterface": {
         "type": "Direct",
-        "requested": "[5.0.3, )",
-        "resolved": "5.0.3",
-        "contentHash": "l+sryO+LJK1m29tGt2TgnOP2lh+ScixRn4VEFb/dLVCFVGJsPXtBv5yrolIXsEZqiJ9y6bDdlN6q8lvklNq3Bg=="
+        "requested": "[5.1.3, )",
+        "resolved": "5.1.3",
+        "contentHash": "f1alp86Dby33bKJpICLhxr6zvLi66CFRsXhl/G6xNR7205ZZ5Vr3lUoTgaMex9oh12vVjbeoGbshKJ65L7871A=="
       },
       "coverlet.collector": {
         "type": "Direct",
